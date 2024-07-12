@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export class DataSource extends Component {
+export default class DataSource extends Component {
   constructor(props) {
     super(props)
     this.state = { pageName: '' }

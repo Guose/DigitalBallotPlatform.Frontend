@@ -1,8 +1,8 @@
 import { Main } from './components/Main/Main'
 import { AuditLog } from './components/Audit/AuditLog'
 import { DataExport } from './components/DataExport/DataExport'
-import { DataSource } from './components/DataSource/DataSource'
-import { ElectionSetup } from './components/ElectionSetup/ElectionSetup'
+import DataSource from './components/DataSource/DataSource'
+import ElectionSetupPage from './pages/ElectionSetup/ElectionSetupPage'
 import { MailSorting } from './components/MailSorting/MailSorting'
 import { PullList } from './components/PullList/PullList'
 import { Reporting } from './components/Reporting/Reporting'
@@ -27,7 +27,7 @@ const AppRoutes = [
   },
   {
     path: '/election-setup',
-    element: <ElectionSetup />
+    element: <ElectionSetupPage />
   },
   {
     path: '/mail-sorting',
