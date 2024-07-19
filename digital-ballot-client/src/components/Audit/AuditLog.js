@@ -10,7 +10,7 @@ export class AuditLog extends Component {
     this.state = { 
       auditLog: '', 
       loading: true,
-      weather: []
+      categories: []
     }
     this.populateAuditLogs = this.populateAuditLogs.bind(this)
     this.retrieve = this.retrieve.bind(this)
@@ -29,12 +29,12 @@ export class AuditLog extends Component {
   }
 
   async retrieve() {
-    await axios.get("http://localhost:3001/weather")
+    await axios.get("http://localhost:3001/BallotCategory")
     .then((res) => {
-      const weatherData = [...res.data]
-      console.log('weather: ', weatherData)
+      const categoryData = [...res.data]
+      console.log('categories: ', categoryData)
       this.setState({
-        weather: weatherData
+        categories: categoryData
       })
     })
   }
@@ -46,18 +46,18 @@ export class AuditLog extends Component {
   }
 
   render() {
-    const { auditLog, loading, weather } = this.state
+    const { auditLog, loading, categories: category } = this.state
 
     let contents = loading ? <p><em>Loading...</em></p> : AuditLog.renderAuditLogPage(auditLog)
     console.log('data: ', this.state)
 
-    const weatherData = weather.map((item, index) => {
+    const categoryData = category.map((item, index) => {
       return(
         <tr key={index} className='header'>
-          <td>{item.date}</td>
-          <td>{item.temperatureC}</td>
-          <td>{item.temperatureF}</td>
-          <td>{item.summary}</td>
+          <td>{item.category}</td>
+          <td>{item.subCategory}</td>
+          <td>{item.description}</td>
+          <td>{item.isTestdeck}</td>
         </tr>
       )
     })
@@ -72,14 +72,14 @@ export class AuditLog extends Component {
           <table className='content-table'>
             <thead>
               <tr>
-                <th>Date</th>
-                <th>TemperatureC</th>
-                <th>TemperatureF</th>
-                <th>Summary</th>
+                <th>Category</th>
+                <th>SubCategory</th>
+                <th>Description</th>
+                <th>Testdecks</th>
               </tr>
             </thead>
             <tbody>
-            {loading ? <tr><td colSpan="4"><em>Loading...</em></td></tr> : weatherData}
+            {loading ? <tr><td colSpan="4"><em>Loading...</em></td></tr> : categoryData}
             </tbody>
           </table>
         </div>

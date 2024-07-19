@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const BallotSpecs = () => {
+const Specs = () => {
   const [specs, setSpecs] = useState([]);
 
   useEffect(() => {
@@ -53,4 +53,4 @@ const BallotSpecs = () => {
   );
 };
 
-export default BallotSpecs;
+export default Specs;

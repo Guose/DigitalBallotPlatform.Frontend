@@ -1,9 +1,9 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import BallotCategory from '../../components/ElectionSetup/Ballots/BallotCategory';
-import BallotMaterial from '../../components/ElectionSetup/Ballots/BallotMaterial';
-import BallotSpecs from '../../components/ElectionSetup/Ballots/BallotSpecs';
+import Category from '../../components/ElectionSetup/Ballots/Category';
+import Material from '../../components/ElectionSetup/Ballots/Material';
+import Specs from '../../components/ElectionSetup/Ballots/Specs';
 
 const ElectionSetupPage = () => {
   return (
@@ -26,13 +26,13 @@ const ElectionSetupPage = () => {
             </TabList>
 
             <TabPanel>
-              <BallotCategory />
+              <Category />
             </TabPanel>
             <TabPanel>
-              <BallotMaterial />
+              <Material />
             </TabPanel>
             <TabPanel>
-              <BallotSpecs />
+              <Specs />
             </TabPanel>
           </Tabs>
         </TabPanel>

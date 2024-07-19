@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const BallotMaterial = () => {
+const Material = () => {
   const [materials, setMaterials] = useState([]);
 
   useEffect(() => {
@@ -53,4 +53,4 @@ const BallotMaterial = () => {
   );
 };
 
-export default BallotMaterial;
+export default Material;
