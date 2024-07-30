@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Table from '../../../services/DataGrid/Table'
+import './ballotStyle.css'
 
 const BASE_URL = 'http://localhost:3001/BallotCategory'
+const fields = [
+    {name: 'category', label: 'Category', type: 'text'},
+    {name: 'subCategory', label: 'SubCategory', type: 'text'},
+    {name: 'laTestDeckType', label: 'LATestdeckType', type: 'text'},
+    {name: 'description', label: 'Description', type: 'text'},
+    {name: 'isTestdeck', label: 'Testdecks', type: 'checkbox'},
+    {name: 'enabled', label: 'Enable', type: 'checkbox'},
+]
 
 const Category = () => {
   const [loading, setLoading] = useState(true)
   const [categoryData, setCategoryData] = useState([])
-  const [newCategoryData, setNewCategoryData] = useState({
-    id: 0,
-    category: 0,
-    subCategory: 0,
-    laTestDeckType: 0,
-    description: '',
-    isTestdeck: false,
-    enabled: false,
-    ballotSpecId: 0
-  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,17 +31,22 @@ const Category = () => {
     fetchData()
   }, [])
 
-  const handleInputChange = (e, index) => {
-    const {name, value, type, checked } = e.target
-    const newData = [...categoryData]
-
-    if (type === 'checkbox') {
-      newData[index][name] = checked
-    } else {
-      newData[index][name] = value
-    }
-
-    setNewCategoryData(newData)
+  const updateRow = async (updatedRow) => {
+    setCategoryData(categoryData.map(row => row.id === updatedRow.id ? updateRow : row))
+    console.log(updateRow)
+    await axios.put(BASE_URL, updateRow)
+    .then((response) => {
+      console.log('Update response', response.data)
+    })
+    .catch(err => {
+      if (err.response) {
+        console.error(`Error response: ${err.response}`)
+      } else if (err.request) {
+        console.error(`Error request: ${err.request}`)
+      } else {
+        console.error(`Error message: ${err.message}`)
+      }
+    })
   }
 
   return (
@@ -50,72 +55,12 @@ const Category = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-      <table>
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>subCategory</th>
-            <th>Description</th>
-            <th>Testdeck</th>
-            <th>LA Rotation</th>
-            <th>Enable</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categoryData.map((row, index) => (
-            <tr key={index}>
-              <td>
-                <input
-                  type='text'
-                  name='category'
-                  value={row.category}
-                  onChange={(e) => handleInputChange(e, index)}
-                  />
-              </td>
-              <td>
-                <input
-                  type='text'
-                  name='suCategory'
-                  value={row.subCategory}
-                  onChange={(e) => handleInputChange(e, index)}
-                  />
-              </td>
-              <td>
-                <input
-                  type='text'
-                  name='description'
-                  value={row.description}
-                  onChange={(e) => handleInputChange(e, index)}
-                  />
-              </td>
-              <td>
-                <input
-                  type='checkbox'
-                  name='isTestdeck'
-                  value={newCategoryData.isTestdeck}
-                  onChange={(e) => handleInputChange(e, index)}
-                  />
-              </td>
-              <td>
-                <input
-                  type='text'
-                  name='laType'
-                  value={row.laTestDeckType}
-                  onChange={(e) => handleInputChange(e, index)}
-                  />
-              </td>
-              <td>
-                <input
-                  type='checkbox'
-                  name='enabled'
-                  value={newCategoryData.enabled}
-                  onChange={(e) => handleInputChange(e, index)}
-                  />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className='table-container'>
+        <Table
+        data={categoryData}
+        updateRow={updateRow}
+        fields={fields} />
+      </div>
       )}
     </div>
   )

@@ -1,0 +1,78 @@
+.content-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 0.9em;
+  min-width: 400px;
+  width: 97%;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+  background-color: #c91414;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+  padding: 12px 15px;
+}
+
+.content-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+  border-bottom: 2px solid #c91414;
+}
+
+.content-table tbody tr:hover {
+  font-weight: bold;
+  color: #c91414;
+  font-size: 1em;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 15px;
+}
+
+.dropbtn {
+  background-color: #f1f1f1;
+  color: black;
+  border: none;
+  padding: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button {
+  padding: 2px 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #1a82ff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0a113a;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}

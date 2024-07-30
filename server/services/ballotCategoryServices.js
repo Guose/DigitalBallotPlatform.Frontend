@@ -5,7 +5,7 @@ const BASE_URL = 'http://localhost:5001/api/Ballot/BallotCategory'
 const getBallotCategories = async () => {
   try {
     const response = await axios.get(BASE_URL)
-    console.log('ballot category:',response.data)
+    // console.log('ballot category:',response.data)
     return response.data
   } catch (error) {
     console.error('Error fetching ballot categories', error)

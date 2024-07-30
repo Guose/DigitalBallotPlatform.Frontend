@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 import NavMenu from './NavMenu';
-import './Layout.css'
+import './styles/Layout.css'
 
 export default class Layout extends Component {
   constructor(props) {
