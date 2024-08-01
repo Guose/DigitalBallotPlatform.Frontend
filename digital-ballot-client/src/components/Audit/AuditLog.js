@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import './audit.css'
+import '../../shared/styles/tables.css'
 
 export class AuditLog extends Component {
   static displayName = AuditLog.name
@@ -24,7 +25,7 @@ export class AuditLog extends Component {
   async populateAuditLogs() {
     this.setState({
       auditLog: 'This is the Audit Log page where it will list a log of user-level operations',
-      loading: false
+      
     })
   }
 
@@ -34,7 +35,8 @@ export class AuditLog extends Component {
       const categoryData = [...res.data]
       console.log('categories: ', categoryData)
       this.setState({
-        categories: categoryData
+        categories: categoryData,
+        loading: false
       })
     })
   }

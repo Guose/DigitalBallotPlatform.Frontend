@@ -15,6 +15,7 @@ const PlatformUser = require('./routes/platformUserRoutes')
 const Role = require('./routes/roleRoutes')
 const Watermark = require('./routes/watermarkRoutes')
 const WatermarkColor = require('./routes/watermarkColorRoutes')
+const Login = require('./routes/loginRoutes')
 
 // use middleware
 app.use(cors())
@@ -32,5 +33,6 @@ app.use('/User', PlatformUser)
 app.use('/Role', Role)
 app.use('/Watermark', Watermark)
 app.use('/WatermarkColor', WatermarkColor)
+app.use('/Login', Login)
 
 app.listen(PORT, () => {console.log('Server is running on PORT:', PORT)})

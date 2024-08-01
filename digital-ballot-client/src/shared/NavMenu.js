@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { NavMenuData } from './NavMenuData'
 import * as MdIcons from 'react-icons/md'
 import { IconContext } from 'react-icons'
-import './NavMenu.css';
+import './styles/NavMenu.css';
 
 export default class NavMenu extends Component {
   constructor(props) {

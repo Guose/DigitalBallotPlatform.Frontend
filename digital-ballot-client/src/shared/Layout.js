@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
-import NavMenu from './NavMenu';
-import './Layout.css'
+import React, { Component } from 'react'
+import { Container, Row, Col } from 'reactstrap'
+import UserDropDown from '../services/userDropDownService'
+import NavMenu from './NavMenu'
+import './styles/Layout.css'
 
 export default class Layout extends Component {
   constructor(props) {
@@ -26,14 +27,14 @@ export default class Layout extends Component {
 
   render() {
     return (
-      <div className='main-container'>
-      
+      <div className='main-container'>      
         <div className='color-bar'>
           <h1 className='project-name'>Digital Ballot Platform</h1>
+          <UserDropDown />
         </div>
-
         <Container fluid className='px-0'>
-          <Row md={0} noGutters>
+        <Row className='g-0'>
+          {/* <Row md={0} noGutters> */}
             <Col md={this.state.columnCount} className='nav-bar'>
               <NavMenu toggleSideBar={this.toggleSideBar} />
             </Col>
