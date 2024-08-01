@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const BASE_URL = 'https://localhost:7300/api/Platform/User'
+const BASE_URL = 'http://localhost:5001/api/Platform/User'
 
 const getUsers = async () => {
   try {
@@ -12,9 +12,13 @@ const getUsers = async () => {
   }
 }
 
-const getUserById = async (id) => {
+const getUserById = async (id, token) => {
   try {
-    const response = await axios.get(`${BASE_URL}/${id}`)
+    const response = await axios.get(`${BASE_URL}/${id}`, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error(`Error fetching user with ID ${id}`, error)

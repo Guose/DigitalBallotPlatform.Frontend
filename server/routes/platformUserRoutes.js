@@ -12,11 +12,13 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]
   try {
-    const user = await userService.getUserById(req.params.id)
+    const user = await userService.getUserById(req.params.id, token)
     res.json(user)
   } catch (error) {
     res.status(500).send(error.message)
+    console.log('ERROR:',error)
   }
 })
 
