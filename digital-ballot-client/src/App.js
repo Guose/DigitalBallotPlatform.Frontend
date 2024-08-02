@@ -6,20 +6,20 @@ import { UserProvider } from './context/UserContext'
 import './App.css'
 
 export default class App extends Component {
-    static displayName = App.name
+	static displayName = App.name
 
-    render() {
-			return(
-				<UserProvider>
-					<Layout>
-						<Routes>
-							{AppRoutes.map((route, index) => {
-									const { element, ...rest } = route
-									return <Route key={index} {...rest} element={element} />
-							})}
-						</Routes>
-					</Layout>
-				</UserProvider>
-			)
-    }
+	render() {
+		return(
+			<UserProvider>
+				<Layout>
+					<Routes>
+						{AppRoutes.map((route, index) => {
+								const { element, ...rest } = route
+								return <Route key={index} {...rest} element={element} />
+						})}
+					</Routes>
+				</Layout>
+			</UserProvider>
+		)
+	}
 }

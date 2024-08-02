@@ -2,6 +2,7 @@
   position: absolute;
   top: 10px;
   right: 20px;
+  border-radius: 5rem;
 }
 
 .login-button {
@@ -12,42 +13,4 @@
   border: none;
   color: white;
   cursor: pointer;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.user-info-logged-in {
-  display: flex;
-  align-items: center;
-}
-
-.user-initials {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: #007bff;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.logout-button {
-  background: none;
-  border: none;
-  color: #007bff;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.login-link {
-  color: #007bff;
-  text-decoration: none;
-  font-size: 16px;
 }

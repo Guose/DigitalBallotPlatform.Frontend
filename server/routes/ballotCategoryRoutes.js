@@ -3,8 +3,12 @@ const router = express.Router()
 const ballotCategoryService = require('../services/ballotCategoryServices')
 
 router.get('/', async (req, res) => {
+  //const token2 = localStorage.getItem('token')
+  //console.log('tokens from routes:', token2)
   try {
-    const ballotCategories = await ballotCategoryService.getBallotCategories()
+    const token = req.headers.authorization.split(' ')[1]
+    console.log('token from routes:', token)
+    const ballotCategories = await ballotCategoryService.getBallotCategories(token)
     res.json(ballotCategories)
   } catch (error) {
     res.status(500).send(error.message)

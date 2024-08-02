@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input } from 'reactstrap'
 import axios from 'axios'
 import { useUser } from '../../context/UserContext'
-import './login.css';
+import './login.css'
 
 const LoginModal = ({ isOpen, toggle }) => {
   const [username, setUsername] = useState('')
@@ -12,15 +12,12 @@ const LoginModal = ({ isOpen, toggle }) => {
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:3001/Login', { username, password })
-      const { token, user } = response.data
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', user.id)
-      login({ user });
-      console.log('Logging in with username:', user.username)
-      toggle()
+      const userToken  = response.data.token
+      const userData = response.data.user
+      login(userData, userToken)
     } catch (error) {
-      console.error('Login failed', error);
-      alert('Login failed, please check your credentials and try again.');
+      console.error('Login failed', error)
+      alert('Login failed, please check your credentials and try again.')
     }
   }
 

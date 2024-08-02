@@ -2,10 +2,13 @@ const axios = require('axios')
 
 const BASE_URL = 'http://localhost:5001/api/Ballot/BallotCategory'
 
-const getBallotCategories = async () => {
+const getBallotCategories = async (token) => {
   try {
-    const response = await axios.get(BASE_URL)
-    // console.log('ballot category:',response.data)
+    const response = await axios.get(BASE_URL, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error('Error fetching ballot categories', error)
@@ -13,9 +16,13 @@ const getBallotCategories = async () => {
   }
 }
 
-const getBallotCategoryById = async (id) => {
+const getBallotCategoryById = async (id, token) => {
   try {
-    const response = await axios.get(`${BASE_URL}/${id}`)
+    const response = await axios.get(`${BASE_URL}/${id}`, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error(`Error fetching ballot with ID ${id}`, error)
@@ -23,9 +30,13 @@ const getBallotCategoryById = async (id) => {
   }
 }
 
-const postBallotCategory = async (categoryData) => {
+const postBallotCategory = async (categoryData, token) => {
   try {
-    const response = await axios.post(BASE_URL, categoryData)
+    const response = await axios.post(BASE_URL, categoryData, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error(`Error creating ballot: `, error)
@@ -33,9 +44,13 @@ const postBallotCategory = async (categoryData) => {
   }
 }
 
-const updateBallotCategory = async (id, categoryData) => {
+const updateBallotCategory = async (id, categoryData, token) => {
   try {
-    const response = await axios.put(`${BASE_URL}/${id}`, categoryData)
+    const response = await axios.put(`${BASE_URL}/${id}`, categoryData, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error(`Error updating ballot: `, error)
@@ -43,9 +58,13 @@ const updateBallotCategory = async (id, categoryData) => {
   }
 }
 
-const deleteBallotCategory = async (id) => {
+const deleteBallotCategory = async (id, token) => {
   try {
-    await axios.delete(`${BASE_URL}/${id}`)
+    await axios.delete(`${BASE_URL}/${id}`, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
   } catch (error) {
     console.error(`Error deleting ballot: `, error)
     throw error

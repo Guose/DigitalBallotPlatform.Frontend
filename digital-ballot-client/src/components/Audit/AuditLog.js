@@ -30,7 +30,12 @@ export class AuditLog extends Component {
   }
 
   async retrieve() {
-    await axios.get("http://localhost:3001/BallotCategory")
+    const token = localStorage.getItem('token')
+    await axios.get("http://localhost:3001/BallotCategory", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     .then((res) => {
       const categoryData = [...res.data]
       console.log('categories: ', categoryData)
