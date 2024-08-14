@@ -1,56 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import Table from '../../../services/DataGrid/Table'
+import './ballotStyle.css'
 
-const Specs = () => {
-  const [specs, setSpecs] = useState([]);
+const BASE_URL = 'http://localhost:3001/BallotSpec'
+const fields = [
+    {name: 'length', label: 'Length', type: 'number'},
+    {name: 'width', label: 'Width', type: 'number'},
+    {name: 'pages', label: 'Pages', type: 'number'},
+    {name: 'stubSize', label: 'Stub Size', type: 'number'},
+    {name: 'isTopStub', label: 'Tob Stub', type: 'checkbox'},
+    {name: 'isDuplex', label: 'Duplex', type: 'checkbox'},
+    {name: 'enabled', label: 'Enable', type: 'checkbox'},
+]
+
+const Category = () => {
+  const [loading, setLoading] = useState(true)
+  const [specData, setSpecData] = useState([])  
 
   useEffect(() => {
-    fetchSpecs();
-  }, []);
-
-  const fetchSpecs = async () => {
-    try {
-      const response = await axios.get('http://localhost:3001/api/ballots/specs');
-      setSpecs(response.data);
-    } catch (error) {
-      console.error('Error fetching specs:', error);
+    const fetchData = async () => {
+      const token = localStorage.getItem('token')
+      try {
+        const res = await axios.get(`${BASE_URL}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        console.log('spec response:', res.data)
+        setSpecData(res.data)
+      } catch (error) {
+        console.error('Error fetching ballot Specs', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  };
+    fetchData()
+  }, [])
 
-  const addSpec = async (spec) => {
-    try {
-      await axios.post('http://localhost:3001/api/ballots/specs', spec);
-      fetchSpecs();
-    } catch (error) {
-      console.error('Error adding spec:', error);
-    }
-  };
-
-  const editSpec = async (id, updatedSpec) => {
-    try {
-      await axios.put(`http://localhost:3001/api/ballots/specs/${id}`, updatedSpec);
-      fetchSpecs();
-    } catch (error) {
-      console.error('Error editing spec:', error);
-    }
-  };
-
-  const deleteSpec = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3001/api/ballots/specs/${id}`);
-      fetchSpecs();
-    } catch (error) {
-      console.error('Error deleting spec:', error);
-    }
-  };
+  const updateRow = async (updatedRow) => {
+    setSpecData(specData.map(row => row.id === updatedRow.id ? updateRow : row))
+    console.log(updateRow)
+    await axios.put(BASE_URL, updateRow)
+    .then((response) => {
+      console.log('Update response', response.data)
+    })
+    .catch(err => {
+      if (err.response) {
+        console.error(`Error response: ${err.response}`)
+      } else if (err.request) {
+        console.error(`Error request: ${err.request}`)
+      } else {
+        console.error(`Error message: ${err.message}`)
+      }
+    })
+  }
 
   return (
     <div>
-      <h2>Ballot Specs</h2>
-      {/* Table and form for managing ballot specs */}
-      {/* This is a simplified example; add form and table rendering here */}
+      <h2>Ballot Categories</h2>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+      <div className='table-container'>
+        <Table
+        data={specData}
+        updateRow={updateRow}
+        fields={fields} />
+      </div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default Specs;
+export default Category;

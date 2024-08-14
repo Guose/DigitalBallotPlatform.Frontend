@@ -3,8 +3,6 @@ const router = express.Router()
 const ballotCategoryService = require('../services/ballotCategoryServices')
 
 router.get('/', async (req, res) => {
-  //const token2 = localStorage.getItem('token')
-  //console.log('tokens from routes:', token2)
   try {
     const token = req.headers.authorization.split(' ')[1]
     console.log('token from routes:', token)

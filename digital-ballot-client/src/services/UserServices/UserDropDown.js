@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu } from 'reactstrap';
-import { useUser } from '../context/UserContext'
-import LoginModal from '../components/Login/LoginModal'
-import '../shared/styles/userDropDown.css'
+import { useUser } from '../../context/UserContext'
+import LoginModal from '../../components/Login/LoginModal'
+import '../../shared/styles/userDropDown.css'
 
 const UserDropDown = () => {
   const { user, logout, loginModalOpen, toggleLoginModal } = useUser()

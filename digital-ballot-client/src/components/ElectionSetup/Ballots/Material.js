@@ -1,56 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import Table from '../../../services/DataGrid/Table'
+import './ballotStyle.css'
 
-const Material = () => {
-  const [materials, setMaterials] = useState([]);
+const BASE_URL = 'http://localhost:3001/BallotMaterial'
+const fields = [
+    {name: 'weight', label: 'Basis Weight', type: 'number'},
+    {name: 'company', label: 'Manufacture', type: 'text'},
+    {name: 'isTextWeight', label: 'Text Weight', type: 'checkbox'},
+    {name: 'enabled', label: 'Enable', type: 'checkbox'},
+]
+
+const Category = () => {
+  const [loading, setLoading] = useState(true)
+  const [materialData, setMaterialData] = useState([])  
 
   useEffect(() => {
-    fetchMaterials();
-  }, []);
-
-  const fetchMaterials = async () => {
-    try {
-      const response = await axios.get('http://localhost:3001/api/ballots/materials');
-      setMaterials(response.data);
-    } catch (error) {
-      console.error('Error fetching materials:', error);
+    const fetchData = async () => {
+      const token = localStorage.getItem('token')
+      try {
+        const res = await axios.get(`${BASE_URL}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        console.log('material response:', res.data)
+        setMaterialData(res.data)
+      } catch (error) {
+        console.error('Error fetching ballot materials', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  };
+    fetchData()
+  }, [])
 
-  const addMaterial = async (material) => {
-    try {
-      await axios.post('http://localhost:3001/api/ballots/materials', material);
-      fetchMaterials();
-    } catch (error) {
-      console.error('Error adding material:', error);
-    }
-  };
-
-  const editMaterial = async (id, updatedMaterial) => {
-    try {
-      await axios.put(`http://localhost:3001/api/ballots/materials/${id}`, updatedMaterial);
-      fetchMaterials();
-    } catch (error) {
-      console.error('Error editing material:', error);
-    }
-  };
-
-  const deleteMaterial = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3001/api/ballots/materials/${id}`);
-      fetchMaterials();
-    } catch (error) {
-      console.error('Error deleting material:', error);
-    }
-  };
+  const updateRow = async (updatedRow) => {
+    setMaterialData(materialData.map(row => row.id === updatedRow.id ? updateRow : row))
+    console.log(updateRow)
+    await axios.put(BASE_URL, updateRow)
+    .then((response) => {
+      console.log('Update response', response.data)
+    })
+    .catch(err => {
+      if (err.response) {
+        console.error(`Error response: ${err.response}`)
+      } else if (err.request) {
+        console.error(`Error request: ${err.request}`)
+      } else {
+        console.error(`Error message: ${err.message}`)
+      }
+    })
+  }
 
   return (
     <div>
-      <h2>Ballot Materials</h2>
-      {/* Table and form for managing ballot materials */}
-      {/* This is a simplified example; add form and table rendering here */}
+      <h2>Ballot Categories</h2>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+      <div className='table-container'>
+        <Table
+        data={materialData}
+        updateRow={updateRow}
+        fields={fields} />
+      </div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default Material;
+export default Category;

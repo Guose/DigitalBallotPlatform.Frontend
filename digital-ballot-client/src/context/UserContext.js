@@ -32,7 +32,7 @@ export const UserProvider = ({ children }) => {
           setUser(response.data)
         } catch (error) {
           console.error('Failed to get user:', error)
-          alert(`Failed to get user: ${error.message}`)
+          //alert(`Failed to get user: ${error.message}`)
           setLoginModalOpen(true)
         }
       } else if (!storedToken || !userId) {
