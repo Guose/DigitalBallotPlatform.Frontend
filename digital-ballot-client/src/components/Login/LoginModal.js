@@ -9,7 +9,9 @@ const LoginModal = ({ isOpen, toggle }) => {
   const [password, setPassword] = useState('')
   const { login } = useUser()
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    
     try {
       const response = await axios.post('http://localhost:3001/Login', { username, password })
       const userToken  = response.data.token
@@ -21,11 +23,17 @@ const LoginModal = ({ isOpen, toggle }) => {
     }
   }
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleLogin(event)
+    }
+  }
+
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
       <ModalHeader toggle={toggle}>Login</ModalHeader>
         <ModalBody>
-          <Form>
+          <Form onSubmit={handleLogin}>
             <FormGroup>
               <Label for='username'>Username</Label>
               <Input
@@ -34,6 +42,8 @@ const LoginModal = ({ isOpen, toggle }) => {
                 id='username'
                 value={username}
                 onChange={e => setUsername(e.target.value)}
+                onKeyDown={handleKeyDown}
+                required
                 />
             </FormGroup>
             <FormGroup>
@@ -49,7 +59,7 @@ const LoginModal = ({ isOpen, toggle }) => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleLogin}>Login</Button>{' '}
+          <Button color="primary" type='submit' onClick={handleLogin}>Login</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
       </ModalFooter>              
     </Modal>

@@ -18,7 +18,7 @@ const Category = () => {
   const [categoryData, setCategoryData] = useState([])  
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategoryData = async () => {
       const token = localStorage.getItem('token')
       try {
         const res = await axios.get(`${BASE_URL}`, {
@@ -33,7 +33,7 @@ const Category = () => {
         setLoading(false)
       }
     }
-    fetchData()
+    fetchCategoryData()
   }, [])
 
   const updateRow = async (updatedRow) => {

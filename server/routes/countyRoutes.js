@@ -11,6 +11,24 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/BallotSystemType', async (req, res) => {
+  try {
+    const ballotSystemType = await countyService.getBallotSystemType()
+    res.json(ballotSystemType)
+  } catch (error) {
+    res.status(500).send(error.message)
+  }
+})
+
+router.get('/VoterSystemType', async (req, res) => {
+  try {
+    const voterSystemType = await countyService.getVoterSystemType()
+    res.json(voterSystemType)
+  } catch (error) {
+    res.status(500).send(error.message)
+  }
+})
+
 router.get('/:id', async (req, res) => {
   try {
     const county = await countyService.getCountyById(req.params.id)
