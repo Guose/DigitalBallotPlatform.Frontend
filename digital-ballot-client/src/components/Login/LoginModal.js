@@ -13,9 +13,15 @@ const LoginModal = ({ isOpen, toggle }) => {
     event.preventDefault();
     
     try {
+      console.log('username:', username)
+      console.log('password', password)
       const response = await axios.post('http://localhost:3001/Login', { username, password })
       const userToken  = response.data.token
       const userData = response.data.user
+
+
+      localStorage.setItem('user', JSON.stringify(userData))
+
       login(userData, userToken)
     } catch (error) {
       console.error('Login failed', error)
