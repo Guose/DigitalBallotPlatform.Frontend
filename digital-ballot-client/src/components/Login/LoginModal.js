@@ -8,14 +8,13 @@ const LoginModal = ({ isOpen, toggle }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const { login } = useUser()
+  const authInterval = 1
 
   const handleLogin = async (event) => {
     event.preventDefault();
     
     try {
-      console.log('username:', username)
-      console.log('password', password)
-      const response = await axios.post('http://localhost:3001/Login', { username, password })
+      const response = await axios.post('http://localhost:3001/Auth/authenticateUser', { username, password, authInterval })
       const userToken  = response.data.token
       const userData = response.data.user
 

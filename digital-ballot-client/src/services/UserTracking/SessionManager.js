@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap'
 import { useUser } from '../../context/UserContext'
+import axios from 'axios'
 
 export const SessionManager = ({ children }) => {
     const [isInactive, setIsInactive] = useState(false)
-    const navigate = useNavigate()
     const inactivityTimerRef = useRef(null)
     const promptTimerRef = useRef(null)
     const { logout } = useUser()
+    const authInterval = 1
 
     const handleLogout = useCallback(() => {
         console.log('Logging out...')
@@ -20,9 +20,10 @@ export const SessionManager = ({ children }) => {
         console.log('prompting user to continue...')
         promptTimerRef.current = setTimeout(() => {
             console.log('No response from user, logging out...')
+            setIsInactive(false)
             handleLogout() // User didn't respond within 5 minutes
         }, 5 * 60 * 1000) // 5 minutes prompt
-    }, [handleLogout])
+    }, [setIsInactive, handleLogout])
 
     const resetInactivityTimer = useCallback(() => {
         console.log('Resetting inactivity timer...')
@@ -31,34 +32,23 @@ export const SessionManager = ({ children }) => {
             console.log('Inactivity detected, showing modal...')
             setIsInactive(true)
             promptUserToContinue()
-        }, 1 * 60 * 1000) // 15 minutes
+        }, 20 * 60 * 1000) // 15 minutes
     }, [promptUserToContinue])
 
 
     const handleContinueSession = useCallback(async () => {
         try {
-            console.log('Renewing token...-')
-            const user = JSON.parse(localStorage.getItem('user'))
             const token = localStorage.getItem('token')
 
-            const response = await fetch('http://localhost:3001/Login', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ user })
-            })
-
-            if (response.ok) {
+            const response = await axios.post('http://localhost:3001/Auth/renewToken', { token, authInterval})
+            if (response.data) {
                 console.log('response for token renew is ok...')
-                const data = await response.json()
-                localStorage.setItem('token', data.newToken)
+                localStorage.setItem('token', response.data.token)
                 setIsInactive(false)
                 clearTimeout(promptTimerRef.current)
                 resetInactivityTimer()
             } else {
-                console.log('Bad response, logging use out...')
+                console.log('Bad response, logging user out...')
                 handleLogout()
             }
         } catch (error) {
@@ -96,7 +86,6 @@ export const SessionManager = ({ children }) => {
             </ModalBody>
             <ModalFooter>
                 <Button color="primary" onClick={handleContinueSession}>Continue Session</Button>
-                <Button color="secondary" onClick={handleLogout}>Logout</Button>
             </ModalFooter>
         </Modal>
         </>
