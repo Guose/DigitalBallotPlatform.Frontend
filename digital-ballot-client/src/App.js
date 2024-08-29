@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import AppRoutes from './AppRoutes'
 import Layout from './shared/Layout'
-import { UserProvider } from './context/UserContext'
+import  { useUser } from './context/UserContext'
 import './App.css'
+import LoginModal from './components/Login/LoginModal'
 
-export default class App extends Component {
-	static displayName = App.name
+const App = () => {
+		const { loginModalOpen, toggleLoginModal } = useUser()
 
-	render() {
 		return(
-			<UserProvider>
-				<Layout>
+			<Layout>
+				<LoginModal isOpen={loginModalOpen} toggle={toggleLoginModal} />
 					<Routes>
 						{AppRoutes.map((route, index) => {
 								const { element, ...rest } = route
@@ -19,7 +19,7 @@ export default class App extends Component {
 						})}
 					</Routes>
 				</Layout>
-			</UserProvider>
 		)
-	}
 }
+
+export default App

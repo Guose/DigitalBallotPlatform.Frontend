@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import axios from 'axios'
+import React, { createContext, useState, useEffect, useContext } from 'react'
 
 const UserContext = createContext()
 
@@ -15,29 +15,23 @@ export const UserProvider = ({ children }) => {
       const storedToken = localStorage.getItem('token')
       const userId = localStorage.getItem('userId')
 
-      console.log('Initial storedToken:', storedToken);  // Add logging
-      console.log('Initial userId:', userId);            // Add logging
+      console.log('Initial storedToken:', storedToken)
+      console.log('Initial userId:', userId)
 
       if (storedToken && !user && userId) {
-        console.log('user:', user)
-        console.log('token:', storedToken)
-        console.log('userId:', userId)
         try {
           const response = await axios.get(`http://localhost:3001/User/${userId}`, {
             headers: {
               Authorization: `Bearer ${storedToken}`,
             },
           })
-          console.log('response.data for user:', response.data)
           setUser(response.data)
         } catch (error) {
           console.error('Failed to get user:', error)
-          //alert(`Failed to get user: ${error.message}`)
           setLoginModalOpen(true)
         }
       } else if (!storedToken || !userId) {
-        console.log('No storedToken or userId found, opening login modal')
-        setLoginModalOpen(true) // Open login modal if no token or user ID found
+        setLoginModalOpen(true)
       }
     }
 
@@ -80,8 +74,10 @@ export const UserProvider = ({ children }) => {
   const toggleLoginModal = () => setLoginModalOpen(prevState => !prevState)
 
   return (
-    <UserContext.Provider value={{user, bearerToken, login, logout, loginModalOpen, toggleLoginModal}}>
+    <UserContext.Provider value={{user, bearerToken, login, logout, loginModalOpen, toggleLoginModal }}>
       {children}
     </UserContext.Provider>
-  );
+  )
 }
+
+export { UserContext }
