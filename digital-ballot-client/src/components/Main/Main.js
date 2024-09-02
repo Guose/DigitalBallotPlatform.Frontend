@@ -9,11 +9,20 @@ export const Main = () => {
         if (user) {
             setFirstname(user.firstname)
         }
-    },[user])
+    },[user, firstname])
+
+    const handleLogout = () => {
+        setFirstname('')
+        logout()
+    }
 
     return (
         <div>
-            <h1>Hello, {firstname}</h1>
+            {user ? (
+                <h1>Hello {firstname},</h1>
+            ) : (
+                <h1>PLease Login</h1>
+            )}
             <p>Welcome to your new single-page application, built with:</p>
             <ul>
                 <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
@@ -31,8 +40,8 @@ export const Main = () => {
             {/* Example usage of user context */}
             {user ? (
                 <div>
-                <p>Welcome back, {user.name}!</p>
-                <button onClick={logout}>Logout</button>
+                <p>Welcome back, {firstname}!</p>
+                <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
                 <p>Please log in.</p>

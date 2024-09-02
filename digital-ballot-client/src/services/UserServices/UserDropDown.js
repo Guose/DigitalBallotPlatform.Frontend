@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Dropdown, DropdownToggle, DropdownItem, DropdownMenu } from 'reactstrap';
 import { useUser } from '../../context/UserContext'
-import LoginModal from '../../components/Login/LoginModal'
 import '../../shared/styles/userDropDown.css'
 
 const UserDropDown = () => {
-  const { user, logout, loginModalOpen, toggleLoginModal } = useUser()
+  const { user, logout, toggleLoginModal } = useUser()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [userInitials, setUserInitials] = useState('')
 
   useEffect(() => {
     if (user !== null) {
-      console.log('user', user)
       setUserInitials(user.firstname[0] + user.lastname[0])
     }
   }, [user])
@@ -28,6 +26,7 @@ const UserDropDown = () => {
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem header>{user.name}</DropdownItem>
+            <DropdownItem>Profile (Coming Soon)</DropdownItem>
             <DropdownItem>Settings (Coming Soon)</DropdownItem>
             <DropdownItem divider />
             <DropdownItem onClick={logout}>Logout</DropdownItem>
@@ -36,7 +35,6 @@ const UserDropDown = () => {
       ) : (
         <button onClick={toggleLoginModal} className="login-button">Login</button>
       )}
-      <LoginModal isOpen={loginModalOpen} toggle={toggleLoginModal} />
     </>
   )
 }

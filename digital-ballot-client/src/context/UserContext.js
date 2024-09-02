@@ -1,83 +1,98 @@
-import axios from 'axios'
-import React, { createContext, useState, useEffect, useContext } from 'react'
+import React, { createContext, useState, useEffect, useCallback, useContext } from 'react'
+import Cookies from 'js-cookie'
+import axios from '../api/axios'
 
 const UserContext = createContext()
 
 export const useUser = () => useContext(UserContext)
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [bearerToken, setBearerToken] = useState(localStorage.getItem('token'))
-  const [loginModalOpen, setLoginModalOpen] = useState(false)
+    const [user, setUser] = useState(null)
+    const [token, setToken] = useState('')
+    // const [rememberMe, setRememberMe] = useState(false)
+    const [loginModalOpen, setLoginModalOpen] = useState(false)
+    const authInterval = 2
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const storedToken = localStorage.getItem('token')
-      const userId = localStorage.getItem('userId')
-
-      console.log('Initial storedToken:', storedToken)
-      console.log('Initial userId:', userId)
-
-      if (storedToken && !user && userId) {
+    const login = async (username, password, rememberMe) => {
         try {
-          const response = await axios.get(`http://localhost:3001/User/${userId}`, {
-            headers: {
-              Authorization: `Bearer ${storedToken}`,
-            },
-          })
-          setUser(response.data)
+            const response = await axios.post('/Auth/authenticateUser', {
+                username,
+                password,
+                authInterval,
+                rememberMe,
+            })          
+
+            if (response.data && response.data.token && response.data.user) {
+                const token = response.data.token
+                setToken(token)
+                setUser(response.data.user)
+
+                const cookieOptions = rememberMe ? { expires: 1 } : {}
+                Cookies.set('authToken', token, cookieOptions)
+
+                return response.data
+            } else {
+                console.error('Unexpected response structure:', response.data)
+                return null
+            }
         } catch (error) {
-          console.error('Failed to get user:', error)
-          setLoginModalOpen(true)
+            console.error('Login failed', error)
+            alert('Login failed, please check your credentials and try again.')
         }
-      } else if (!storedToken || !userId) {
-        setLoginModalOpen(true)
-      }
     }
 
-    fetchData()
-  }, [user])
-
-  useEffect(() => {
-    const requestInterceptor = axios.interceptors.request.use(
-      (config) => {
-        if (bearerToken) {
-          config.headers.Authorization = `Bearer ${bearerToken}`
+    const logout = async () => {
+        try {
+            await axios.post('/Auth/logout')
+        } catch (error) {
+            console.error('Logout failed', error)
+        } finally {
+            setUser(null)
+            setLoginModalOpen(false)
         }
-        return config
-      },
-      (error) => Promise.reject(error)
+    }
+
+    const toggleLoginModal = () => setLoginModalOpen(prev => !prev)
+
+    const fetchUser = useCallback(async () => {
+        try {
+            const token = Cookies.get('authToken')
+
+            if (token) {
+                setToken(token)
+            }
+            const response = await axios.get('http://localhost:3001/Auth/me', token, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            })
+                      
+            setUser(response.data.user)
+
+        } catch (error) {
+            setTimeout(() => {
+                setUser(null)
+                alert('Please log in.')
+            }, 1 * 60 * 1000)            
+        }
+    }, [])
+
+    useEffect(() => {
+        fetchUser()
+    }, [fetchUser])
+
+    return (
+        <UserContext.Provider value={{
+            user,
+            token,
+            login,
+            logout,
+            loginModalOpen,
+            toggleLoginModal,
+        }}>
+            {children}
+        </UserContext.Provider>
     )
-
-    return () => {
-      axios.interceptors.request.eject(requestInterceptor)
-    }
-  }, [bearerToken])
-
-  const login = (userData, userToken) => {
-    console.log('login in UserContext.js', userData)
-    setUser(userData)
-    setBearerToken(userToken)
-    localStorage.setItem('token', userToken)
-    localStorage.setItem('userId', userData.id)
-    setLoginModalOpen(false)
-  }
-
-  const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('userId')
-    setUser(null)
-    setBearerToken(null)
-    setLoginModalOpen(true)
-  }
-
-  const toggleLoginModal = () => setLoginModalOpen(prevState => !prevState)
-
-  return (
-    <UserContext.Provider value={{user, bearerToken, login, logout, loginModalOpen, toggleLoginModal }}>
-      {children}
-    </UserContext.Provider>
-  )
 }
 
 export { UserContext }

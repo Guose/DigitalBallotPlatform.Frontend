@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import axios from '../../api/axios'
+import Cookies from 'js-cookie'
 import './audit.css'
 import '../../shared/styles/tables.css'
 
@@ -30,7 +31,7 @@ export class AuditLog extends Component {
   }
 
   async retrieve() {
-    const token = localStorage.getItem('token')
+    const token = Cookies.get('authToken')
     await axios.get("http://localhost:3001/BallotCategory", {
       headers: {
         Authorization: `Bearer ${token}`
@@ -73,7 +74,7 @@ export class AuditLog extends Component {
       <div>
         <div>
           <h1 id='auditLogLabel'>Audit Log Page</h1>
-          <p>{contents}</p>
+          {contents}
         </div>
         <div className='table-container'>
           <table className='content-table'>

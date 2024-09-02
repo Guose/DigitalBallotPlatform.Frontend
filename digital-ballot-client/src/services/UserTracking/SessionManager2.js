@@ -1,9 +1,7 @@
-// src/components/SessionManager.js
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import RenewTokenModal from '../../components/Login/RenewTokenModal'
-import LoginModal from '../../components/Login/LoginModal'
+import RenewTokenModal from '../../components/Login/RenewTokenModal2'
+import LoginModal from '../../components/Login/LoginModal2'
 import { useUser } from '../../context/UserContext'
-import axios from '../../api/axios'
 
 export const SessionManager = ({ children }) => {
     const [isInactive, setIsInactive] = useState(false)
@@ -17,7 +15,7 @@ export const SessionManager = ({ children }) => {
     }, [logout])
 
     const promptUserToContinue = useCallback(() => {
-        console.log('Prompting user to continue...')
+        console.log('prompting user to continue...')
         
         promptTimerRef.current = setTimeout(() => {
             console.log('No response from user, logging out...')
@@ -34,21 +32,8 @@ export const SessionManager = ({ children }) => {
             console.log('Inactivity detected, showing modal...')
             setIsInactive(true)
             promptUserToContinue()
-        }, 20 * 60 * 1000) // 15 minutes
+        }, 15 * 60 * 1000) // 15 minutes
     }, [promptUserToContinue])
-
-    const renewToken = useCallback(async () => {
-        try {
-            const response = await axios.post('/Auth/renewToken')
-            console.log(response.data.message)
-            setIsInactive(false)
-            resetInactivityTimer()
-        } catch (error) {
-            console.error('Token renewal failed', error)
-            setIsInactive(false)
-            handleLogout()
-        }
-    }, [handleLogout, resetInactivityTimer])
 
     useEffect(() => {
         const events = ['keydown', 'click']
@@ -75,8 +60,8 @@ export const SessionManager = ({ children }) => {
             <RenewTokenModal
                 isOpen={isInactive}
                 onClose={() => setIsInactive(false)}
-                renewToken={renewToken}
-            />
+                resetInactivityTimer={resetInactivityTimer}
+                />
             <LoginModal isOpen={loginModalOpen} toggle={toggleLoginModal} />
         </>
     )
