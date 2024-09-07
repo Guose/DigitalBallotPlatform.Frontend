@@ -24,10 +24,10 @@ export const UserProvider = ({ children }) => {
             if (response.data && response.data.token && response.data.user) {
                 setToken(response.data.token)
                 setUser(response.data.user)
-
-                const cookieOptions = rememberMe ? { expires: 1 } : {}
-                Cookies.set('authToken', token, cookieOptions)
                 setRememberUser(rememberMe)                
+
+                const cookieOptions = rememberMe ? { expires: 3 } : { expires: 1 }
+                Cookies.set('authToken', token, cookieOptions)
 
                 return response.data
             } else {

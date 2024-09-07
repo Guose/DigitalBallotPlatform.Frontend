@@ -23,7 +23,7 @@ export const SessionManager = ({ children }) => {
             console.log('No response from user...')
             setIsActive(false)
             logout(false, true) // User didn't respond within 5 minutes
-        }, 1 * 60 * 1000) // 5 minutes prompt
+        }, 10 * 60 * 1000) // 5 minutes prompt
     }, [logout])
 
     const resetInactivityTimer = useCallback(() => {
@@ -35,7 +35,7 @@ export const SessionManager = ({ children }) => {
                 console.log('Inactivity detected, showing modal...')
                 setIsActive(true)
                 promptUserToContinue()
-            }, 1 * 60 * 1000) // 15 minutes
+            }, 15 * 60 * 1000) // 15 minutes
         }
     }, [promptUserToContinue, token])
 
