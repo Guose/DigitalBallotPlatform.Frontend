@@ -2,9 +2,13 @@ const axios = require('axios')
 
 const BASE_URL = 'http://localhost:5001/api/Platform/User'
 
-const getUsers = async () => {
+const getUsers = async (token) => {
   try {
-    const response = await axios.get(`${BASE_URL}`)
+    const response = await axios.get(`${BASE_URL}`, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error('Error fetching users', error)
@@ -26,9 +30,13 @@ const getUserById = async (id, token) => {
   }
 }
 
-const postUser = async (userData) => {
+const postUser = async (userData, token) => {
   try {
-    const response = await axios.post(BASE_URL, userData)
+    const response = await axios.post(BASE_URL, userData, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error(`Error creating user: `, error)
@@ -36,9 +44,13 @@ const postUser = async (userData) => {
   }
 }
 
-const updateUser = async (id, userData) => {
+const updateUser = async (id, userData, token) => {
   try {
-    const response = await axios.put(`${BASE_URL}/${id}`, userData)
+    const response = await axios.put(`${BASE_URL}/${id}`, userData, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error(`Error updating user: `, error)
@@ -46,9 +58,13 @@ const updateUser = async (id, userData) => {
   }
 }
 
-const deleteUser = async (id) => {
+const deleteUser = async (id, token) => {
   try {
-    await axios.delete(`${BASE_URL}/${id}`)
+    await axios.delete(`${BASE_URL}/${id}`, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
   } catch (error) {
     console.error(`Error deleting user: `, error)
     throw error

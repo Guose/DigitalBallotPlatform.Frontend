@@ -1,25 +1,26 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import AppRoutes from './AppRoutes'
 import Layout from './shared/Layout'
-import { UserProvider } from './context/UserContext'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
 
-export default class App extends Component {
-    static displayName = App.name
+const App = () => {
 
-    render() {
-			return(
-				<UserProvider>
-					<Layout>
-						<Routes>
-							{AppRoutes.map((route, index) => {
-									const { element, ...rest } = route
-									return <Route key={index} {...rest} element={element} />
-							})}
-						</Routes>
-					</Layout>
-				</UserProvider>
-			)
-    }
+		return(
+			<>
+				<Layout>
+					<Routes>
+						{AppRoutes.map((route, index) => {
+								const { element, ...rest } = route
+								return <Route key={index} {...rest} element={element} />
+						})}
+					</Routes>
+				</Layout>
+				<ToastContainer />
+			</>
+		)
 }
+
+export default App

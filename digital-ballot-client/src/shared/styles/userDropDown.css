@@ -1,0 +1,25 @@
+.user-emblem {
+  border: 2px solid #c91414; /* Darker border on hover */
+  background-color: white;
+  color: #c91414;
+  border-radius: 50%;
+  width: 40px; /* Make sure width and height are the same */
+  height: 40px; /* Make sure width and height are the same */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: border 0.2s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.4s ease;
+}
+
+.user-emblem:hover {
+  
+  background-color: #3e4466;
+  color: white;
+}
+
+.user-dropdown {
+  margin-left: auto;
+}

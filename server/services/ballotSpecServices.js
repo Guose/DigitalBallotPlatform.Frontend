@@ -1,10 +1,14 @@
 const axios = require('axios')
 
-const BASE_URL = 'https://localhost:7300/api/Ballot/BallotSpec'
+const BASE_URL = 'http://localhost:5001/api/Ballot/BallotSpec'
 
-const getBallotSpecs = async () => {
+const getBallotSpecs = async (token) => {
   try {
-    const response = await axios.get(`${BASE_URL}`)
+    const response = await axios.get(`${BASE_URL}`, {
+      headers: {
+            Authorization: `Bearer ${token}`,
+          },
+    })
     return response.data
   } catch (error) {
     console.error('Error fetching ballot specs', error)

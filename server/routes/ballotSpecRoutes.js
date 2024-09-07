@@ -4,7 +4,8 @@ const ballotSpecService = require('../services/ballotSpecServices')
 
 router.get('/', async (req, res) => {
   try {
-    const ballotSpecs = await ballotSpecService.getBallotSpecs()
+    const token = req.headers.authorization.split(' ')[1]
+    const ballotSpecs = await ballotSpecService.getBallotSpecs(token)
     res.json(ballotSpecs)
   } catch (error) {
     res.status(500).send(error.message)

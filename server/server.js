@@ -1,5 +1,7 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const app = express()
 const PORT = process.env.PORT || 3001
 
@@ -15,11 +17,15 @@ const PlatformUser = require('./routes/platformUserRoutes')
 const Role = require('./routes/roleRoutes')
 const Watermark = require('./routes/watermarkRoutes')
 const WatermarkColor = require('./routes/watermarkColorRoutes')
-const Login = require('./routes/loginRoutes')
+const Auth = require('./routes/authenticationRoutes')
 
 // use middleware
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}))
 app.use(express.json())
+app.use(cookieParser())
 
 // Use routes
 app.use('/BallotCategory', BallotCategory)
@@ -33,6 +39,6 @@ app.use('/User', PlatformUser)
 app.use('/Role', Role)
 app.use('/Watermark', Watermark)
 app.use('/WatermarkColor', WatermarkColor)
-app.use('/Login', Login)
+app.use('/Auth', Auth)
 
 app.listen(PORT, () => {console.log('Server is running on PORT:', PORT)})

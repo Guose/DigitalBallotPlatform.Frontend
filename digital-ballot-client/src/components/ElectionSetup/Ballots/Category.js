@@ -15,12 +15,17 @@ const fields = [
 
 const Category = () => {
   const [loading, setLoading] = useState(true)
-  const [categoryData, setCategoryData] = useState([])
+  const [categoryData, setCategoryData] = useState([])  
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategoryData = async () => {
+      const token = localStorage.getItem('token')
       try {
-        const res = await axios.get(BASE_URL)
+        const res = await axios.get(`${BASE_URL}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         setCategoryData(res.data)
       } catch (error) {
         console.error('Error fetching ballot categories', error)
@@ -28,7 +33,7 @@ const Category = () => {
         setLoading(false)
       }
     }
-    fetchData()
+    fetchCategoryData()
   }, [])
 
   const updateRow = async (updatedRow) => {

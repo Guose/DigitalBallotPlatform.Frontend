@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const BASE_URL = 'https://localhost:7300/api/Stakeholder/County'
+const BASE_URL = 'http://localhost:5001/api/Stakeholder/County'
 
 const getCounties = async () => {
   try {
@@ -8,6 +8,27 @@ const getCounties = async () => {
     return response.data
   } catch (error) {
     console.error('Error fetching counties', error)
+    throw error
+  }
+}
+
+const getBallotSystemType = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/BallotSystemType`)
+    console.log('response:', response.data)
+    return response.data
+  } catch (error) {
+    console.error(`Error fetching Ballot System Type ${id}`, error)
+    throw error
+  }
+}
+
+const getVoterSystemType = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/VoterSystemType`)
+    return response.data
+  } catch (error) {
+    console.error(`Error fetching Voter System Type ${id}`, error)
     throw error
   }
 }
@@ -52,6 +73,8 @@ const deleteCounty = async (id) => {
 }
 
 module.exports = {
+  getBallotSystemType,
+  getVoterSystemType,
   getCounties,
   getCountyById,
   postCounty,
