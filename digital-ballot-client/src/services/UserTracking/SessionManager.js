@@ -1,83 +1,85 @@
 // src/components/SessionManager.js
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import RenewTokenModal from '../../components/Login/RenewTokenModal'
+import ContinueSessionModal from '../../components/Login/ContinueSessionModal'
 import LoginModal from '../../components/Login/LoginModal'
 import { useUser } from '../../context/UserContext'
 import axios from '../../api/axios'
 
 export const SessionManager = ({ children }) => {
-    const [isInactive, setIsInactive] = useState(false)
+    const [isActive, setIsActive] = useState(false)
     const inactivityTimerRef = useRef(null)
     const promptTimerRef = useRef(null)
-    const { logout, loginModalOpen, toggleLoginModal } = useUser()
-
-    const handleLogout = useCallback(() => {
-        console.log('Logging out...')
-        logout()
-    }, [logout])
+    const {
+        token,
+        logout, 
+        loginModalOpen, 
+        toggleLoginModal,
+    } = useUser()
 
     const promptUserToContinue = useCallback(() => {
         console.log('Prompting user to continue...')
         
         promptTimerRef.current = setTimeout(() => {
-            console.log('No response from user, logging out...')
-            setIsInactive(false)
-            handleLogout() // User didn't respond within 5 minutes
-        }, 5 * 60 * 1000) // 5 minutes prompt
-    }, [handleLogout])
+            console.log('No response from user...')
+            setIsActive(false)
+            logout(false, true) // User didn't respond within 5 minutes
+        }, 1 * 60 * 1000) // 5 minutes prompt
+    }, [logout])
 
     const resetInactivityTimer = useCallback(() => {
-        console.log('Resetting inactivity timer...')
-        clearTimeout(inactivityTimerRef.current)
-        clearTimeout(promptTimerRef.current)
-        inactivityTimerRef.current = setTimeout(() => {
-            console.log('Inactivity detected, showing modal...')
-            setIsInactive(true)
-            promptUserToContinue()
-        }, 20 * 60 * 1000) // 15 minutes
-    }, [promptUserToContinue])
+        if (token) {
+            console.log('Resetting inactivity timer...')
+            clearTimeout(inactivityTimerRef.current)
+            clearTimeout(promptTimerRef.current)
+            inactivityTimerRef.current = setTimeout(() => {
+                console.log('Inactivity detected, showing modal...')
+                setIsActive(true)
+                promptUserToContinue()
+            }, 1 * 60 * 1000) // 15 minutes
+        }
+    }, [promptUserToContinue, token])
 
     const renewToken = useCallback(async () => {
         try {
-            const response = await axios.post('/Auth/renewToken')
-            console.log(response.data.message)
-            setIsInactive(false)
+            const response = await axios.post('/Auth/renewToken', token)
+            console.log('response.data for S.M. renewToken: ', response.data)
+            setIsActive(false)
             resetInactivityTimer()
         } catch (error) {
             console.error('Token renewal failed', error)
-            setIsInactive(false)
-            handleLogout()
         }
-    }, [handleLogout, resetInactivityTimer])
+    }, [resetInactivityTimer, token])
 
     useEffect(() => {
-        const events = ['keydown', 'click']
-        const resetTimer = () => resetInactivityTimer()
+        if (token) {
+            const events = ['keydown', 'click']
+            const resetTimer = () => resetInactivityTimer()
 
-        events.forEach((event) => {
-            window.addEventListener(event, resetTimer)
-        })
+            events.forEach(event => window.addEventListener(event, resetTimer))
 
-        resetInactivityTimer()
+            resetInactivityTimer()
 
-        return () => {
-            clearTimeout(inactivityTimerRef.current)
-            clearTimeout(promptTimerRef.current)
-            events.forEach((event) => {
-                window.removeEventListener(event, resetTimer)
-            })
+            return () => {
+                clearTimeout(inactivityTimerRef.current)
+                clearTimeout(promptTimerRef.current)
+                events.forEach(event => window.removeEventListener(event, resetTimer))
+            }
         }
-    }, [resetInactivityTimer])
+    }, [resetInactivityTimer, token])
 
     return (
         <>
             {children}
-            <RenewTokenModal
-                isOpen={isInactive}
-                onClose={() => setIsInactive(false)}
+            <ContinueSessionModal
+                isOpen={isActive}
+                toggle={() => setIsActive(false)}
                 renewToken={renewToken}
             />
-            <LoginModal isOpen={loginModalOpen} toggle={toggleLoginModal} />
+
+            <LoginModal 
+                isOpen={loginModalOpen} 
+                toggle={toggleLoginModal} 
+            />
         </>
     )
 }

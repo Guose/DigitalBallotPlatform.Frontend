@@ -4,7 +4,7 @@ import { useUser } from '../../context/UserContext'
 import '../../shared/styles/userDropDown.css'
 
 const UserDropDown = () => {
-  const { user, logout, toggleLoginModal } = useUser()
+  const { user, logout, toggleLoginModal, rememberUser } = useUser()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [userInitials, setUserInitials] = useState('')
 
@@ -13,6 +13,15 @@ const UserDropDown = () => {
       setUserInitials(user.firstname[0] + user.lastname[0])
     }
   }, [user])
+
+  const handleLogout = () => {
+    if (!rememberUser) {
+      localStorage.removeItem('username')
+      localStorage.removeItem('password')
+      localStorage.removeItem('rememberMe')
+    }
+    logout(true, false)
+  }
 
   const toggleDropdown = () => setDropdownOpen(prevState => !prevState)
 
@@ -29,7 +38,7 @@ const UserDropDown = () => {
             <DropdownItem>Profile (Coming Soon)</DropdownItem>
             <DropdownItem>Settings (Coming Soon)</DropdownItem>
             <DropdownItem divider />
-            <DropdownItem onClick={logout}>Logout</DropdownItem>
+            <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       ) : (

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button, Form, FormGroup, Label, Input } from 'reactstrap'
 import { useUser } from '../../context/UserContext'
-import './login.css'
+import './styles/login.css'
 
 const LoginModal = ({ isOpen, toggle }) => {
   const [username, setUsername] = useState('')
@@ -15,16 +15,37 @@ const LoginModal = ({ isOpen, toggle }) => {
     if (isOpen && usernameRef.current) {
       usernameRef.current.focus()
     }
-  }, [isOpen])
+
+    if (rememberMe) {
+      const savedUsername = localStorage.getItem('username')
+      const savedPassword = localStorage.getItem('password')
+      const savedRememberMe = JSON.parse(localStorage.getItem('rememberMe'))
+
+      if (savedUsername && savedPassword && savedRememberMe) {
+        setUsername(savedUsername)
+        setPassword(savedPassword)
+        setRememberMe(savedRememberMe)
+      }
+    }
+  }, [isOpen, rememberMe])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-        await login(username, password, rememberMe)
-        toggle()
+      if (rememberMe) {
+        localStorage.setItem('username', username)
+        localStorage.setItem('password', password)
+        localStorage.setItem('rememberMe', JSON.stringify(rememberMe))
+      } else {
+        localStorage.removeItem('username')
+        localStorage.removeItem('password')
+        localStorage.removeItem('rememberMe')
+      }
+      await login(username, password, rememberMe)        
+      toggle()
+      
     } catch (error) {
-        console.error('Login failed', error)
-        alert('Login failed, please check your credentials and try again.')
+        console.error('Login failed in LoginModal', error)
     }
   }
 
@@ -36,7 +57,7 @@ const LoginModal = ({ isOpen, toggle }) => {
 
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}>Login</ModalHeader>
+      <ModalHeader >Login</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleLogin}>
             <FormGroup>

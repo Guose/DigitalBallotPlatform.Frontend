@@ -13,7 +13,7 @@ export const Main = () => {
 
     const handleLogout = () => {
         setFirstname('')
-        logout()
+        logout(true, false)
     }
 
     return (
@@ -21,7 +21,7 @@ export const Main = () => {
             {user ? (
                 <h1>Hello {firstname},</h1>
             ) : (
-                <h1>PLease Login</h1>
+                <h1>Please Login</h1>
             )}
             <p>Welcome to your new single-page application, built with:</p>
             <ul>

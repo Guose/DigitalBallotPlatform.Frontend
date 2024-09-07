@@ -25,6 +25,7 @@
     "react-router-dom": "^6.16.0",
     "react-scripts": "^5.0.1",
     "react-tabs": "^6.0.2",
+    "react-toastify": "^10.0.5",
     "reactstrap": "^9.2.0",
     "redux": "^5.0.1",
     "routes": "^2.1.0",
@@ -69,14 +70,20 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@typescript-eslint/eslint-plugin": "^8.4.0",
+    "@typescript-eslint/parser": "^8.4.0",
     "ajv": "^8.12.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.50.0",
+    "eslint": "^9.9.1",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.33.2",
     "nan": "^2.18.0"
+  },
+  "resolutions": {
+    "postcss": "^8.4.31",
+    "nth-check": "^2.0.1"
   }
 }
